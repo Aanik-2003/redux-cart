@@ -60,7 +60,7 @@ const CategoryPage = ({ params }) => {
               transition={{ delay: index * 0.1 }}
             >
               <div className="group block bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-                {/* ✅ Wrap only image & title in Link */}
+                
                 <Link href={`/${slug}`}>
                   <div className="relative h-56 overflow-hidden cursor-pointer">
                     <Image
@@ -74,7 +74,7 @@ const CategoryPage = ({ params }) => {
                 </Link>
 
                 <div className="p-6">
-                  {/* Tags */}
+                  
                   <div className="flex flex-wrap gap-2 mb-3">
                     {post.tags.map((tag) => (
                       <span
@@ -87,7 +87,7 @@ const CategoryPage = ({ params }) => {
                     ))}
                   </div>
 
-                  {/* ✅ Wrap only title in Link */}
+                  
                   <Link href={`/${slug}`}>
                     <h2 className="text-xl font-bold mb-3 group-hover:text-red-400 transition-colors text-white">
                       {post.title}
@@ -96,7 +96,7 @@ const CategoryPage = ({ params }) => {
 
                   <p className="text-gray-300 text-sm mb-4 line-clamp-2">{post.excerpt}</p>
 
-                  {/* ✅ Add Counter component for each item */}
+                  
                   <Counter postId={slug} />
                 </div>
               </div>
@@ -104,7 +104,7 @@ const CategoryPage = ({ params }) => {
           ))}
         </div>
 
-        {/* Pagination */}
+        
         <div className="flex justify-center mt-10 space-x-4 items-center">
           <button
             disabled={currentPage === 1}
