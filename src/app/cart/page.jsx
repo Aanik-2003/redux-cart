@@ -1,4 +1,4 @@
-// src/app/cart/page.js
+
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ShoppingBag, CheckCircle } from "lucide-react";
 import { reset, resetAll } from "@/redux/cartSlice";
 import { getAllBlogPosts } from "@/lib/blog";
+import Counter from "@/components/Counter";
 
 export default function CartPage() {
   const [showSuccess, setShowSuccess] = useState(false);
@@ -16,6 +17,20 @@ export default function CartPage() {
 
   const cartProducts = posts.filter(({ slug }) => cartItems[slug] && cartItems[slug] > 0);
   const totalItems = Object.values(cartItems).reduce((sum, quantity) => sum + (quantity || 0), 0);
+  const totalPrice = cartProducts.reduce((sum, product) => {
+    const quantity = cartItems[product.slug] || 0;
+    if (product.post && product.post.price) {
+      const priceAmount = product.post.price.replace(/[^0-9.-]+/g, "");
+      const price = parseFloat(priceAmount);
+      return sum + (quantity * price);
+    } else {
+      console.warn(`Missing price for product ${product.slug}`);
+      return sum;  
+    }
+  }, 0);
+
+  const formattedTotalPrice = totalPrice.toFixed(2);
+
 
   const handleCheckout = () => {
     dispatch(resetAll());
@@ -60,11 +75,17 @@ export default function CartPage() {
               </div>
               <div className="flex-grow">
                 <h3 className="text-xl font-semibold text-white">{post.title}</h3>
-                <p className="text-gray-400">Quantity: {cartItems[slug]}</p>
+                <div className="flex items-center space-x-4 mt-3">
+                  <p className="text-gray-400">
+                    Price: {(cartItems[slug] * parseFloat(post.price.replace(/[^0-9.-]+/g, ""))).toFixed(2)}
+                  </p>
+
+                  <Counter postId={slug} />
+                </div>
               </div>
               <button
                 onClick={() => dispatch(reset(slug))}
-                className="p-2 hover:bg-gray-800 rounded-full"
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
               >
                 <X className="w-5 h-5 text-gray-400" />
               </button>
@@ -75,6 +96,7 @@ export default function CartPage() {
         <div className="mt-8 flex justify-between items-center">
           <div className="text-white">
             <p className="text-lg">Total Items: {totalItems}</p>
+            <p className="text-lg">Total Price: {formattedTotalPrice}</p>
           </div>
           <button
             onClick={handleCheckout}

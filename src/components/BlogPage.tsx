@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 import { Search, Tag } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getAllBlogPosts } from "@/lib/blog";
-import Counter from "./Counter";
+// import Counter from "./Counter";
+import AddToCart from "./addToCart";
 
 export default function BlogPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +47,7 @@ export default function BlogPage() {
           </p>
         </motion.div>
 
-       
+
         <div className="relative max-w-2xl mx-auto mb-12">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
           <input
@@ -58,7 +59,7 @@ export default function BlogPage() {
           />
         </div>
 
-       
+
         {isLoading ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -74,13 +75,13 @@ export default function BlogPage() {
           </div>
         ) : (
           <>
-       
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {currentPosts.map(({ slug, post }, index) => (
                 <motion.div key={slug} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}>
                   <div className="group block bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-                    
-                    
+
+
                     <Link href={`/${slug}`}>
                       <div className="relative h-56 perspective-1000 cursor-pointer">
                         <div className="flip-container">
@@ -102,7 +103,7 @@ export default function BlogPage() {
                         ))}
                       </div>
 
-                      
+
                       <Link href={`/${slug}`}>
                         <h2 className="text-xl font-bold mb-3 group-hover:text-red-400 transition-colors text-white cursor-pointer">
                           {post.title}
@@ -110,16 +111,19 @@ export default function BlogPage() {
                       </Link>
 
                       <p className="text-gray-300 text-sm mb-4 line-clamp-2">{post.excerpt}</p>
+                      <div className="flex items-center justify-between space-x-4">
+                        <span className="text-lg font-semibold text-white">{post.price}</span>
+                        {/* <Counter postId={slug} /> */}
+                        <AddToCart postId={slug} />
+                      </div>
 
-                      
-                      <Counter postId={slug} />
                     </div>
                   </div>
                 </motion.div>
               ))}
             </div>
 
-            
+
             <div className="flex justify-center mt-10 space-x-4 items-center">
               <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)} className="px-4 py-2 bg-gray-700 text-white rounded-lg disabled:opacity-50">
                 Previous
